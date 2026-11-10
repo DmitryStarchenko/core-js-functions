@@ -24,7 +24,7 @@ function getCurrentFunctionName() {
 /**
  * Returns the body of the function passed as argument.
  *
- * @param {Function} func - Function to get the body.
+ * @params {function} func - Function to get the body.
  * @return {string} - The body of the function passed as argument.
  *
  * @example
@@ -42,7 +42,7 @@ function getFunctionBody(func) {
 /**
  * Returns the array where each element is the count of function arguments.
  *
- * @param {Function[]} funcs - The array of functions.
+ * @params {array} funcs - The array of functions.
  * @return {array} - The array of arguments count.
  *
  * @example
@@ -84,7 +84,7 @@ function getPowerFunction(exponent) {
  * Returns the polynom function of one argument based on specified coefficients.
  * See: https://en.wikipedia.org/wiki/Polynomial#Definition
  *
- * @param {...number} coefficients
+ * @params {integer}
  * @return {Function}
  *
  * @example
@@ -93,7 +93,6 @@ function getPowerFunction(exponent) {
  *   getPolynom(8)     => y = 8
  *   getPolynom()      => null
  */
-
 function getPolynom(...coefficients) {
   if (arguments.length === 0) {
     return null;
@@ -110,7 +109,7 @@ function getPolynom(...coefficients) {
  * Memoizes passed function and returns function
  * which invoked first time calls the passed function and then always returns cached result.
  *
- * @param {Function} func - function to memoize
+ * @params {Function} func - function to memoize
  * @return {Function} memoized function
  *
  * @example
@@ -199,7 +198,6 @@ function logger(func, logFunc) {
  * Return the function with partial applied arguments
  *
  * @param {Function} fn
- * @param {...*} args
  * @return {Function}
  *
  * @example
@@ -209,7 +207,6 @@ function logger(func, logFunc) {
  *   partialUsingArguments(fn, 'a','b','c')('d') => 'abcd'
  *   partialUsingArguments(fn, 'a','b','c','d')() => 'abcd'
  */
-
 function partialUsingArguments(fn, ...args1) {
   return function func(...args2) {
     return fn(...args1, ...args2);
@@ -220,7 +217,7 @@ function partialUsingArguments(fn, ...args1) {
  * Returns the id generator function that returns next integer starting
  * from specified number every time when invoking.
  *
- * @param {number} startFrom
+ * @param {Number} startFrom
  * @return {Function}
  *
  * @example
