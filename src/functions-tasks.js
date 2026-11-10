@@ -18,13 +18,13 @@
  *
  */
 function getCurrentFunctionName() {
-  throw new Error('Not implemented');
+  return getCurrentFunctionName.name;
 }
 
 /**
  * Returns the body of the function passed as argument.
  *
- * @param {Function} func - Function to get the body.
+ * @params {function} func - Function to get the body.
  * @return {string} - The body of the function passed as argument.
  *
  * @example
@@ -32,14 +32,17 @@ function getCurrentFunctionName() {
  *   getFunctionBody(hiHello) => "function hiHello() { console.log('hello world'); }"
  *
  */
-function getFunctionBody(/* func */) {
-  throw new Error('Not implemented');
+function getFunctionBody(func) {
+  if (func !== undefined) {
+    return func;
+  }
+  return '';
 }
 
 /**
  * Returns the array where each element is the count of function arguments.
  *
- * @param {Function[]} funcs - The array of functions.
+ * @params {array} funcs - The array of functions.
  * @return {array} - The array of arguments count.
  *
  * @example
@@ -50,8 +53,11 @@ function getFunctionBody(/* func */) {
  *  ]) => [0, 1, 2]
  *
  */
-function getArgumentsCount(/* funcs */) {
-  throw new Error('Not implemented');
+function getArgumentsCount(funcs) {
+  if (funcs !== undefined) {
+    return funcs.map((func) => func.length);
+  }
+  return [];
 }
 
 /**
@@ -70,15 +76,15 @@ function getArgumentsCount(/* funcs */) {
  *   power05(16) => 4
  *
  */
-function getPowerFunction(/* exponent */) {
-  throw new Error('Not implemented');
+function getPowerFunction(exponent) {
+  return (x) => x ** exponent;
 }
 
 /**
  * Returns the polynom function of one argument based on specified coefficients.
  * See: https://en.wikipedia.org/wiki/Polynomial#Definition
  *
- * @param {...number} coefficients
+ * @params {integer}
  * @return {Function}
  *
  * @example
@@ -87,17 +93,23 @@ function getPowerFunction(/* exponent */) {
  *   getPolynom(8)     => y = 8
  *   getPolynom()      => null
  */
-function getPolynom(/* ...coefficients */) {
-  throw new Error('Not implemented');
+function getPolynom(...coefficients) {
+  if (arguments.length === 0) {
+    return null;
+  }
+  return (x) =>
+    coefficients.reduce(
+      (acc, coeff, power) =>
+        acc + coeff * x ** (coefficients.length - 1 - power),
+      0
+    );
 }
-
-
 
 /**
  * Memoizes passed function and returns function
  * which invoked first time calls the passed function and then always returns cached result.
  *
- * @param {Function} func - function to memoize
+ * @params {Function} func - function to memoize
  * @return {Function} memoized function
  *
  * @example
@@ -107,8 +119,16 @@ function getPolynom(/* ...coefficients */) {
  *   ...
  *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
-function memoize(/* func */) {
-  throw new Error('Not implemented');
+function memoize(func) {
+  const cache = {};
+  return function funcResult() {
+    if (func in cache) {
+      return cache[func];
+    }
+    const result = func();
+    cache[func] = result;
+    return result;
+  };
 }
 
 /**
@@ -126,8 +146,19 @@ function memoize(/* func */) {
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempts */) {
-  throw new Error('Not implemented');
+function retry(func, attempts) {
+  return function funcResult() {
+    for (let i = 0; i < attempts; i += 1) {
+      try {
+        return func();
+      } catch (e) {
+        if (i === attempts - 1) {
+          throw e;
+        }
+      }
+    }
+    return func();
+  };
 }
 
 /**
@@ -153,15 +184,20 @@ function retry(/* func, attempts */) {
  * cos(3.141592653589793) ends
  *
  */
-function logger(/* func, logFunc */) {
-  throw new Error('Not implemented');
+function logger(func, logFunc) {
+  return function funcResult(...args) {
+    const str = args.map((item) => JSON.stringify(item));
+    logFunc(`${func.name}(${str}) starts`);
+    const result = func(...args);
+    logFunc(`${func.name}(${str}) ends`);
+    return result;
+  };
 }
 
 /**
  * Return the function with partial applied arguments
  *
  * @param {Function} fn
- * @param {...*} args
  * @return {Function}
  *
  * @example
@@ -171,15 +207,17 @@ function logger(/* func, logFunc */) {
  *   partialUsingArguments(fn, 'a','b','c')('d') => 'abcd'
  *   partialUsingArguments(fn, 'a','b','c','d')() => 'abcd'
  */
-function partialUsingArguments(/* fn, ...args */) {
-  throw new Error('Not implemented');
+function partialUsingArguments(fn, ...args1) {
+  return function func(...args2) {
+    return fn(...args1, ...args2);
+  };
 }
 
 /**
  * Returns the id generator function that returns next integer starting
  * from specified number every time when invoking.
  *
- * @param {number} startFrom
+ * @param {Number} startFrom
  * @return {Function}
  *
  * @example
@@ -192,8 +230,12 @@ function partialUsingArguments(/* fn, ...args */) {
  *   getId4() => 7
  *   getId10() => 11
  */
-function getIdGeneratorFunction(/* startFrom */) {
-  throw new Error('Not implemented');
+function getIdGeneratorFunction(startFrom) {
+  let id = startFrom - 1;
+  return function getNextId() {
+    id += 1;
+    return id;
+  };
 }
 
 module.exports = {
